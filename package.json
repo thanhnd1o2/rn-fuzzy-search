@@ -1,6 +1,6 @@
 {
   "name": "rn-fuzzy-search",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "description": "for fuzzy search by native",
   "source": "./src/index.tsx",
   "main": "./lib/commonjs/index.js",
