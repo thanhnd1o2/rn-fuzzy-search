@@ -10,8 +10,8 @@
     "forceConsistentCasingInFileNames": true,
     "jsx": "react-jsx",
     "lib": ["ESNext"],
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
+    "module": "Node16",
+    "moduleResolution": "Node16",
     "noEmit": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
@@ -24,6 +24,6 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "ESNext",
-    "verbatimModuleSyntax": true
+    "verbatimModuleSyntax": false
   }
 }
