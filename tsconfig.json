@@ -11,7 +11,7 @@
     "jsx": "react-jsx",
     "lib": ["ESNext"],
     "module": "Node16",
-    "moduleResolution": "Node16",
+    "moduleResolution": "NodeNext",
     "noEmit": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
