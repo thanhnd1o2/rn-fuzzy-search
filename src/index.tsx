@@ -17,6 +17,57 @@ const RnFuzzySearch = NativeModules.RnFuzzySearch
       }
     );
 
-export function multiply(a: number, b: number): Promise<number> {
-  return RnFuzzySearch.multiply(a, b);
+const elementTypes = [
+  'NAME',
+  'TEXT',
+  'ADDRESS',
+  'EMAIL',
+  'PHONE',
+  'NUMBER',
+  'DATE',
+] as const;
+
+type ElementType = (typeof elementTypes)[number];
+
+type FuzzySearchOptionFieldObject<T> = {
+  name: keyof T | null | undefined;
+  weight?: number;
+  type?: ElementType;
+};
+
+type FuseOptionField<T> =
+  | FuzzySearchOptionFieldObject<T>
+  | ReadonlyArray<FuzzySearchOptionFieldObject<T>>
+  | keyof T
+  | (keyof T)[];
+
+interface FuzzySearchOptions<T> {
+  keyField?: keyof T;
+  fields?: FuseOptionField<T>;
+  threshold?: number;
+  limit?: number;
+  /**
+   * If true, only the id field will be returned in the result.
+   * @default true
+   * @platform android
+   * @platform ios
+   *
+   * It is recommended to set this to true if you are only interested in the id field.
+   */
+  onlyIdReturned?: boolean;
+}
+
+const defaultOptions: FuzzySearchOptions<any> = {
+  keyField: 'id',
+  threshold: 0.4,
+  onlyIdReturned: true,
+};
+
+export function search<T = any>(
+  searchText: string,
+  list: ReadonlyArray<T>,
+  options?: FuzzySearchOptions<T>
+): Promise<ReadonlyArray<T> | string[]> {
+  const combinedOptions = { ...defaultOptions, ...options };
+  return RnFuzzySearch.search(searchText, list, combinedOptions);
 }
