@@ -10,15 +10,27 @@ npm install rn-fuzzy-search
 
 ## Usage
 
-
 ```js
-import { multiply } from 'rn-fuzzy-search';
+import { search } from 'rn-fuzzy-search';
 
-// ...
+// Example usage
+const result = await search(
+  'Doe',
+  [
+    { id: '1', name: 'Steven Wilson' },
+    { id: '2', name: 'John Doe' },
+    { id: '3', name: 'Stephen Wilkson' },
+  ],
+  {
+    keyField: 'id',
+    fields: 'name',
+    threshold: 0.1,
+    onlyIdReturned: false,
+  }
+);
 
-const result = await multiply(3, 7);
+console.log(result);
 ```
-
 
 ## Contributing
 
@@ -27,7 +39,3 @@ See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the 
 ## License
 
 MIT
-
----
-
-Made with [create-react-native-library](https://github.com/callstack/react-native-builder-bob)
