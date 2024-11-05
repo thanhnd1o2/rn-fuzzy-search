@@ -34,7 +34,7 @@ class RnFuzzySearchModule(reactContext: ReactApplicationContext) :
       is Map<*, *> -> {
         val fieldKey = field["name"] as String
         val fieldValue = item[fieldKey]
-        val weight = field["weight"] as Double
+        val weight = field["weight"] as Double?
         val type = field["type"] as String
         Triple(fieldValue, weight, ElementType.valueOf(type))
       }
