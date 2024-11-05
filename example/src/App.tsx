@@ -1,9 +1,12 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
 import { search } from 'rn-fuzzy-search';
+import my_data from './my_data';
 
 export default function App() {
   const [result, setResult] = useState<string | undefined>();
+
+  const data = useMemo(() => my_data.vi.map((item) => item.words).flat(), []);
 
   return (
     <View style={styles.container}>
@@ -11,50 +14,14 @@ export default function App() {
       <Button
         title="Search"
         onPress={() => {
-          // search(
-          //   'Doe',
-          //   [
-          //     {
-          //       id: '1',
-          //       name: 'Steven Wilson',
-          //     },
-          //     {
-          //       id: '2',
-          //       name: 'John Doe',
-          //     },
-          //     {
-          //       id: '3',
-          //       name: 'Stephen Wilkson',
-          //     },
-          //   ],
-          //   {
-          //     keyField: 'id',
-          //     fields: 'name',
-          //     threshold: 0.1,
-          //     onlyIdReturned: false,
-          //   }
-          // )
-          //   .then((data) => {
-          //     console.log('Search 1', data);
-          //     setResult(JSON.stringify(data));
-          //   })
-          //   .catch((error) => {
-          //     console.error(error);
-          //     setResult(error.message);
-          //   });
-          search(
-            'Steven Wilfson',
-            ['Steven Wilson', 'John Doe', 'Stephen Wilfson'],
-            {
-              threshold: 0.4,
-              fields: {
-                name: null,
-              },
-              // onlyIdReturned: false,
-            }
-          )
+          search('water', data, {
+            keyField: 'id',
+            threshold: 0.1,
+            fields: 'word',
+            onlyIdReturned: false,
+          })
             .then((data) => {
-              console.log('Search 2', data);
+              console.log('Search', data);
               setResult(JSON.stringify(data));
             })
             .catch((error) => {
