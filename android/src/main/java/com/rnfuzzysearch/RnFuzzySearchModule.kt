@@ -102,7 +102,11 @@ class RnFuzzySearchModule(reactContext: ReactApplicationContext) :
       }.createDocument()
     }
 
-    val matchResults = matchService.applyMatch(documentSearch, documentList)[documentSearch]
+    var matchResults = matchService.applyMatch(documentSearch, documentList)[documentSearch]
+
+    if (limit != null) {
+      matchResults = matchResults?.take(limit)
+    }
 
     matchResults?.forEach { match ->
       val rs =
