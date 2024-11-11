@@ -18,4 +18,17 @@ buildscript {
     }
 }
 
+subprojects {
+  repositories {
+    maven {
+      name = "GitHub Packages"
+      url = uri("https://maven.pkg.github.com/thanhnd1o2/fuzzy-search")
+      credentials {
+        username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+        password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+      }
+    }
+  }
+}
+
 apply plugin: "com.facebook.react.rootproject"
