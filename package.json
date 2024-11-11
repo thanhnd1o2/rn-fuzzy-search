@@ -185,5 +185,8 @@
     "type": "module-legacy",
     "languages": "kotlin-swift",
     "version": "0.42.2"
+  },
+  "dependencies": {
+    "fuse.js": "^7.0.0"
   }
 }

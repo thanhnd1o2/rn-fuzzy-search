@@ -85,6 +85,14 @@ android {
 repositories {
   mavenCentral()
   google()
+  maven {
+    name = "GitHub Packages"
+    url = uri("https://maven.pkg.github.com/thanhnd1o2/fuzzy-search")
+    credentials {
+      username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+      password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+    }
+  }
 }
 
 def kotlin_version = getExtOrDefault("kotlinVersion")
@@ -95,6 +103,6 @@ dependencies {
   //noinspection GradleDynamicVersion
   implementation "com.facebook.react:react-native:+"
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-  implementation("com.intuit.fuzzymatcher:fuzzy-matcher:1.2.1")
+  implementation "com.whateverbest:fuzzy-search:2.1"
 }
 
