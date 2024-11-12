@@ -1,5 +1,5 @@
 import { NativeModules, Platform } from 'react-native';
-import type { FuzzySearchOptions } from './types';
+import type { Options, WithScore } from './types';
 
 const LINKING_ERROR =
   `The package 'rn-fuzzy-search' doesn't seem to be linked. Make sure: \n\n` +
@@ -18,17 +18,22 @@ const RnFuzzySearch = NativeModules.RnFuzzySearch
       }
     );
 
-const defaultOptions: FuzzySearchOptions<any> = {
-  keyField: 'id',
-  threshold: 0.4,
-  onlyIdReturned: true,
+const defaultOptions: Options = {
+  threshold: 0.5,
+  includeScore: false,
+  orderByScore: false,
+  limit: null,
+  fullSearch: false,
 };
 
 export function search<T = any>(
   searchText: string,
   list: ReadonlyArray<T>,
-  options?: FuzzySearchOptions<T>
-): Promise<ReadonlyArray<T> | string[]> {
+  options?: Options
+): Promise<ReadonlyArray<T> | ReadonlyArray<WithScore<T>>> {
   const combinedOptions = { ...defaultOptions, ...options };
+  Object.keys(combinedOptions).forEach(
+    (key) => combinedOptions[key] == null && delete combinedOptions[key]
+  );
   return RnFuzzySearch.search(searchText, list, combinedOptions);
 }

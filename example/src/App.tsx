@@ -5,19 +5,34 @@ import my_data from './my_data';
 import Fuse from 'fuse.js';
 
 export default function App() {
-  const [result, setResult] = useState<string | undefined>();
+  const [result] = useState<string | undefined>();
 
-  const data = useMemo(() => my_data.vi.map((item) => item.words).flat(), []);
+  const data = useMemo(
+    () =>
+      my_data.zh
+        .map((item) => item.words)
+        .flat()
+        .map((item) => {
+          return {
+            _id: item._id,
+            translation: item.translation,
+          };
+        }) as Array<any>,
+    []
+  );
 
   const searchNative = () => {
-    fuzzySearch('unlock', data, {
-      keyField: 'id',
-      fields: 'word',
-      threshold: 3,
+    const startTime = performance.now();
+
+    fuzzySearch('连', data, {
+      keys: ['translation'],
+      threshold: 0.5,
+      limit: 4,
     })
       .then((rs) => {
+        const endTime = performance.now();
         console.log('Search native', rs);
-        setResult(JSON.stringify(rs));
+        console.log(`Search native took ${endTime - startTime} milliseconds`);
       })
       .catch((err) => {
         console.error(err);
@@ -27,12 +42,15 @@ export default function App() {
   const searchJS = () => {
     const fuse = new Fuse(data, {
       keys: ['translation'],
-      threshold: 3,
+      threshold: 0.5,
     });
-    const rs = fuse.search('连');
+    const startTime = performance.now();
+    const rs = fuse.search('连', {
+      limit: 4,
+    });
+    const endTime = performance.now();
     console.log('Search JS', rs);
-
-    setResult(JSON.stringify(rs));
+    console.log(`Search JS took ${endTime - startTime} milliseconds`);
   };
 
   return (

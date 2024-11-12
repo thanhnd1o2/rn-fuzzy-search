@@ -1,39 +1,18 @@
-const elementTypes = [
-  'NAME',
-  'TEXT',
-  'ADDRESS',
-  'EMAIL',
-  'PHONE',
-  'NUMBER',
-  'DATE',
-] as const;
+export interface KeyType {
+  name: string;
+  weight: number;
+}
 
-export type ElementType = (typeof elementTypes)[number];
-
-export type FuzzySearchOptionFieldObject<T> = {
-  name: keyof T | null | undefined;
-  weight?: number;
-  type?: ElementType;
-};
-
-export type FuseOptionField<T> =
-  | FuzzySearchOptionFieldObject<T>
-  | ReadonlyArray<FuzzySearchOptionFieldObject<T>>
-  | keyof T
-  | (keyof T)[];
-
-export interface FuzzySearchOptions<T> {
-  keyField?: keyof T;
-  fields?: FuseOptionField<T>;
+export interface Options {
   threshold?: number;
-  limit?: number;
-  /**
-   * If true, only the id field will be returned in the result.
-   * @default true
-   * @platform android
-   * @platform ios
-   *
-   * It is recommended to set this to true if you are only interested in the id field.
-   */
-  onlyIdReturned?: boolean;
+  keys?: KeyType[] | string[];
+  includeScore?: boolean;
+  orderByScore?: boolean;
+  limit?: number | null;
+  fullSearch?: boolean;
+}
+
+export interface WithScore<T> {
+  item: T;
+  score: number;
 }

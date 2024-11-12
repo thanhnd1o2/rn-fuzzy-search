@@ -6,6 +6,8 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
+import com.facebook.react.bridge.WritableNativeArray
+import com.facebook.react.bridge.WritableNativeMap
 import com.whateverbest.search.FuzzySearcher
 import com.whateverbest.search.Options
 import com.whateverbest.search.PostProcessors
@@ -59,7 +61,33 @@ class RnFuzzySearchModule(reactContext: ReactApplicationContext) :
         )
       )
 
-      promise.resolve(matches)
+      promise.resolve(WritableNativeArray().apply {
+        matches.forEach { match ->
+          pushMap(
+            WritableNativeMap().apply {
+              (match as Map<*, *>).forEach matchPropsForEach@{ (key, value) ->
+                key as String
+                if (value == null) {
+                  putNull(key)
+                  return@matchPropsForEach
+                }
+
+                when (value) {
+                  is String -> putString(key, value)
+                  is Int -> putInt(key, value)
+                  is Double -> putDouble(key, value)
+                  is Long -> putLong(key, value)
+                  is Boolean -> putBoolean(key, value)
+                  is ReadableArray -> putArray(key, value)
+                  is ReadableMap -> putMap(key, value)
+                  else -> putString(key, value.toString())
+                }
+
+              }
+            }
+          )
+        }
+      })
     } catch (e: Exception) {
       promise.reject(e)
     }
